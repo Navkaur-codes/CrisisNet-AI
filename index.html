@@ -4,30 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CrisisNet AI</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Global News/Status Ticker -->
+    <div class="global-ticker">
+        <div class="ticker-content">
+            <span class="ticker-item"><i class="fa-solid fa-satellite-dish pulse-icon-small"></i> <span class="global-system-status">SYSTEM NOMINAL</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-location-crosshairs"></i> REGION: NEW DELHI SECTOR 4</span>
+            <span class="ticker-item"><i class="fa-solid fa-shield-halved"></i> THREAT LEVEL: <span class="global-threat-level" style="color:var(--color-low)">LOW</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-network-wired"></i> ACTIVE ALERTS: <span class="global-active-uplinks">0</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-satellite-dish pulse-icon-small"></i> <span class="global-system-status">SYSTEM NOMINAL</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-location-crosshairs"></i> REGION: NEW DELHI SECTOR 4</span>
+            <span class="ticker-item"><i class="fa-solid fa-shield-halved"></i> THREAT LEVEL: <span class="global-threat-level" style="color:var(--color-low)">LOW</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-network-wired"></i> ACTIVE ALERTS: <span class="global-active-uplinks">0</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-satellite-dish pulse-icon-small"></i> <span class="global-system-status">SYSTEM NOMINAL</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-location-crosshairs"></i> REGION: NEW DELHI SECTOR 4</span>
+            <span class="ticker-item"><i class="fa-solid fa-shield-halved"></i> THREAT LEVEL: <span class="global-threat-level" style="color:var(--color-low)">LOW</span></span>
+            <span class="ticker-item"><i class="fa-solid fa-network-wired"></i> ACTIVE ALERTS: <span class="global-active-uplinks">0</span></span>
+        </div>
+    </div>
 
-    <!-- Main Application Container -->
     <div class="app-container">
-        
         <!-- Sidebar Dashboard -->
         <aside class="dashboard-panel">
             <header class="dashboard-header">
-                <div class="brand">
-                    <i class="fa-solid fa-shield-heart pulse-icon"></i>
-                    <h1>CrisisNet AI</h1>
+                <div>
+                    <div class="brand">
+                        <i class="fa-solid fa-shield-heart pulse-icon"></i>
+                        <h1>CrisisNet AI</h1>
+                    </div>
+                    <div class="system-identity">
+                        AI-powered real-time emergency triage for public spaces <br>
+                        <span class="impact-metric"><i class="fa-solid fa-bullseye"></i> Goal: Reduce response time by 40%</span>
+                    </div>
                 </div>
                 <div class="header-actions">
-                    <button id="demo-btn" class="btn btn-secondary"><i class="fa-solid fa-bolt"></i> Demo Load</button>
-                    <div class="system-status online"><span class="dot"></span> System Active</div>
+                    <button id="api-settings-btn" class="btn btn-secondary btn-sm"><i class="fa-solid fa-key"></i> Settings</button>
+                    <div class="custom-dropdown">
+                        <button class="btn btn-secondary btn-sm dropbtn"><i class="fa-solid fa-bolt"></i> Scenarios <i class="fa-solid fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#" class="demo-trigger" data-scenario="campus">🎓 College Campus</a>
+                            <a href="#" class="demo-trigger" data-scenario="stadium">🏟️ Action Stadium</a>
+                            <a href="#" class="demo-trigger" data-scenario="airport">✈️ Int. Airport</a>
+                        </div>
+                    </div>
+                    <button id="toggle-heatmap" class="btn btn-secondary btn-sm"><i class="fa-solid fa-layer-group"></i> Threat Map</button>
                 </div>
             </header>
 
@@ -52,21 +77,33 @@
                     <span class="sort-indicator">Sorted by Priority <i class="fa-solid fa-arrow-down-wide-short"></i></span>
                 </div>
                 <div id="alerts-list" class="alerts-list">
-                    <!-- Alerts will be injected here -->
                     <div class="empty-state">
                         <i class="fa-regular fa-bell-slash"></i>
                         <p>No active emergencies</p>
                     </div>
                 </div>
             </div>
+
+            <!-- SYSTEM LOG FEED -->
+            <div class="system-log-panel">
+                <div class="log-header"><i class="fa-solid fa-terminal"></i> Activity Log</div>
+                <div id="system-log" class="system-log"></div>
+            </div>
         </aside>
 
         <!-- Main Map View -->
         <main class="map-panel">
             <div id="map"></div>
+            <!-- Threat Overlay Info Panel -->
+            <div id="threat-info-panel" class="threat-info-panel hidden">
+                <div class="threat-header">
+                    <i class="fa-solid fa-crosshairs pulse-icon"></i> High Risk Zone Detected
+                </div>
+                <div class="threat-score">Threat Score: <span id="threat-score-val">0.0</span> / 10</div>
+                <div class="threat-route"><i class="fa-solid fa-route"></i> Recommended Safe Exit Route Active</div>
+            </div>
         </main>
 
-        <!-- Floating SOS Button -->
         <button id="sos-trigger" class="sos-trigger">
             <span class="pulse-ring"></span>
             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -74,46 +111,96 @@
         </button>
     </div>
 
-    <!-- SOS Modal Overlay -->
+    <!-- SOS Modal -->
     <div id="sos-modal" class="modal-overlay hidden">
         <div class="modal-content sos-panel">
             <div class="modal-header">
                 <h2>Emergency Report</h2>
                 <button id="close-sos" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            
             <div class="modal-body">
                 <div id="sos-step-1">
-                    <p class="instruction">Tap the large button and describe your emergency.</p>
-                    <button id="record-btn" class="big-record-btn">
-                        <i class="fa-solid fa-microphone"></i>
-                        <span>Hold to Speak</span>
-                    </button>
-                    <div class="text-fallback">
-                        <p>Or type your message:</p>
-                        <textarea id="sos-text" placeholder="E.g. Fire in the lobby, someone is hurt..."></textarea>
+                    <p class="instruction">Describe the emergency or upload a visual signal.</p>
+                    
+                    <div class="sos-inputs">
+                        <textarea id="sos-text" placeholder="Type your message... (Live AI analysis active)"></textarea>
+                        
+                        <div class="action-buttons-row" style="display: flex; gap: 8px; margin-top: 8px;">
+                            <!-- NEW: Voice Input WOW Feature -->
+                            <button id="btn-voice-input" class="btn btn-secondary" style="flex: 1;">
+                                <i class="fa-solid fa-microphone"></i> Push to Talk
+                            </button>
+                        </div>
+
+                        <!-- LAYER 3.1: Image AI -->
+                        <div class="image-upload-wrapper">
+                            <input type="file" id="image-upload" accept="image/*" class="hidden">
+                            <button id="btn-upload-image" class="btn btn-secondary">
+                                <i class="fa-solid fa-camera"></i> Scan Hazard Photo
+                            </button>
+                            <span id="upload-status" class="upload-status"></span>
+                            
+                            <div id="preview-container" class="hidden" style="position: relative; margin-top: 4px; width: 100%;">
+                                <img id="image-preview" src="" style="width: 100%; max-height:200px; object-fit: cover; border-radius:8px; border:1px solid rgba(255,255,255,0.2);">
+                                <button id="btn-remove-image" class="icon-btn" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); border-radius: 4px; padding: 4px 8px; color: white;">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            
+                            <canvas id="hidden-canvas" style="display:none;"></canvas>
+                        </div>
                     </div>
-                    <button id="submit-sos" class="btn btn-primary btn-large">Send Alert Now</button>
+
+                    <!-- LAYER 2: Live Intelligence Panel -->
+                    <div class="live-transcription-panel">
+                        <div class="ai-status-header">
+                            <i class="fa-solid fa-microchip ai-glow"></i> AI Status: <span id="ai-status-text">Waiting for input...</span>
+                        </div>
+                        <div id="live-text-stream" class="live-text-stream"></div>
+                        <div id="live-transitions" class="live-transitions"></div>
+                    </div>
+
+                    <button id="submit-sos" class="btn btn-primary btn-large" style="margin-top: 16px;">Send Alert Now</button>
                 </div>
+
                 <div id="sos-step-2" class="hidden">
-                    <div class="success-animation">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                    <h3>Help is being coordinated</h3>
-                    <p>Security and responders have been notified with your exact location.</p>
-                    <p class="ai-insight-preview"></p>
+                    <div class="success-animation"><i class="fa-solid fa-circle-check"></i></div>
+                    <h3>Engine Confirmed</h3>
+                    <p>Alert integrated into Situation Awareness matrix.</p>
                     <button id="dismiss-sos-success" class="btn btn-secondary">Close</button>
                 </div>
             </div>
         </div>
-    </div> <!-- Alert Detail Modal -->
+    </div> 
+
+    <!-- API Settings Modal -->
+    <div id="api-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>API Configuration</h2>
+                <button id="close-api-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="instruction" style="margin-bottom: 20px;">Enter your Gemini API key to activate advanced Multi-Modal Intelligence. If left blank, the system will seamlessly fall back to local rule-based heuristics.</p>
+                <div class="sos-inputs">
+                    <label style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 8px; display: block;">Gemini API Key</label>
+                    <input type="password" id="api-key-input" placeholder="AIzaSy..." style="width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; color: white;">
+                </div>
+                <button id="save-api-key" class="btn btn-primary btn-large" style="margin-top: 16px;">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Detail Modal -->
     <div id="alert-modal" class="modal-overlay hidden">
         <div class="modal-content alert-detail-panel">
             <div class="modal-header">
-                <h2>Alert Details</h2>
+                <h2>Signal Analysis</h2>
                 <button id="close-alert" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body" id="alert-detail-body">
-                <!-- Content injected dynamically -->
+                <!-- Injected via app.js -->
             </div>
             <div class="modal-actions" id="alert-modal-actions">
                 <button class="btn btn-primary" id="btn-assign">Assign to Me</button>
@@ -122,9 +209,16 @@
         </div>
     </div>
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Application JS -->
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Load Secrets -->
+    <script src="config.js"></script>
+    <!-- Load Engine -->
     <script src="app.js"></script>
 </body>
 </html>

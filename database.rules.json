@@ -1,0 +1,53 @@
+{
+  "rules": {
+    "alerts": {
+      // 1. Read Access:
+      // The dashboard needs to continuously read all alerts to draw the map and heatmaps.
+      ".read": true,
+      
+      "$alertId": {
+        // 2. Write/Delete Access:
+        // You cannot delete data (newData MUST exist). 
+        // This prevents hackers from wiping your whole database.
+        // You can create new alerts or update existing ones.
+        ".write": "newData.exists()",
+
+        // 3. Schema Enforcement (The core defense mapping to app.js):
+        // Hackers cannot inject dummy data bombs; it MUST look exactly like a CrisisNet Alert.
+        ".validate": "newData.hasChildren(['timestamp', 'status', 'severity', 'priority'])",
+        
+        "timestamp": { 
+          ".validate": "newData.isString()" 
+        },
+        "status": { 
+          // You can only change the dashboard status to one of these three exact strings.
+          ".validate": "newData.val() == 'pending' || newData.val() == 'assigned' || newData.val() == 'resolved'" 
+        },
+        "severity": { 
+          ".validate": "newData.val() == 'low' || newData.val() == 'medium' || newData.val() == 'critical'" 
+        },
+        "priority": { 
+          // Stops injection of NaN or string priorities that break the UI sorting math.
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10" 
+        },
+        "confidence": { 
+          ".validate": "!newData.exists() || newData.isNumber()" 
+        },
+        "type": { 
+          // Limit length to stop string memory bombs that freeze the dashboard.
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 100)" 
+        },
+        "originalMessage": {
+           // Cap the original message length to protect parsing overhead.
+           ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 1000)" 
+        },
+        "action": {
+           ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 250)"
+        },
+        "reasoning": {
+           ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 1000)"
+        }
+      }
+    }
+  }
+}
