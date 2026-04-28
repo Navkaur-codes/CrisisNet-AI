@@ -1,6 +1,6 @@
 # CrisisNet AI - Continuous AI Situation Awareness Engine 🚨
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live_Project-red.svg?style=for-the-badge)](#INSERT_YOUR_LIVE_DEMO_LINK_HERE)
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Project-red.svg?style=for-the-badge)](https://graceful-blancmange-6a6180.netlify.app/)
 
 **A Multi-Signal Intelligence Platform for Crisis Environments.**
 
