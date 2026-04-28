@@ -841,7 +841,7 @@ class APISettingsController {
         document.getElementById('save-api-key').addEventListener('click', () => this.save());
     }
     open() {
-        this.input.value = sessionStorage.getItem('GEMINI_API_KEY') || "";
+        this.input.value = GEMINI_API_KEY;
         this.modal.classList.remove('hidden');
     }
     close() {
@@ -849,7 +849,6 @@ class APISettingsController {
     }
     save() {
         const key = this.input.value.trim();
-        sessionStorage.setItem('GEMINI_API_KEY', key);
         GEMINI_API_KEY = key; // Update the global variable
         SystemLogger.log(key ? "Gemini API Key loaded into session matrix." : "Gemini API Key cleared. Using local rules engine.", 'warning');
         this.close();

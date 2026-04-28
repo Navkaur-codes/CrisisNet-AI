@@ -2,7 +2,7 @@
 // 🔴 PRODUCTION CONFIGURATION 🔴
 // This file contains secrets and is ignored by Git (.gitignore).
 // ==========================================
-let GEMINI_API_KEY = sessionStorage.getItem('GEMINI_API_KEY') || ""; 
+let GEMINI_API_KEY = ""; 
 
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCQUFM6pu4J5iNNFypnbzqZs0koWQQDKTM", 
