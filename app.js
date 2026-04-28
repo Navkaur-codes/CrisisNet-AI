@@ -732,20 +732,18 @@ class SOSController {
         };
     }
 
-    // WOW FEATURE: Real Geolocation
+    // Simulated Geolocation for Demo Continuity
     async getRealCoordinates() {
+        // We simulate a localized coordinate rather than asking for real GPS
+        // to prevent browser permission popups during demos and keep the action
+        // anchored in the New Delhi demo region.
         return new Promise((resolve) => {
-            if ("geolocation" in navigator) {
-                // SystemLogger.log("Geolocating user coordinates...", "warning");
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-                }, () => {
-                    // SystemLogger.log("GPS Blocked. Reverting to regional base bounds.", "warning");
-                    resolve(null);
-                }, { timeout: 3000 });
-            } else {
-                resolve(null);
-            }
+            setTimeout(() => {
+                resolve({
+                    lat: MAP_CENTER[0] + (Math.random() - 0.5) * 0.006,
+                    lng: MAP_CENTER[1] + (Math.random() - 0.5) * 0.006
+                });
+            }, 300); // Simulate network delay
         });
     }
 

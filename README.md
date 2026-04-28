@@ -34,6 +34,7 @@ We have built a fully functional, highly technical MVP ready for competition. He
 ### 4. Enterprise-Grade Dashboard & Operations
 - **Live Global Ticker:** An absolute top-banner ticker constantly reads out System Status, Active Alerts, and Threat Level natively tied to the data-store.
 - **Firebase Realtime Sync:** Multiple dispatch operators can see alerts update simultaneously via Google Firebase integration.
+- **Mobile Command Split-Screen:** A carefully engineered responsive mobile layout gives field agents a seamless 50/50 split-screen view. The incident map is permanently pinned for absolute situational awareness, while the operational dashboard features fluid internal scrolling underneath.
 
 ---
 
