@@ -17,7 +17,7 @@ CrisisNet relies on a **Continuous AI Situation Awareness Engine**. Rather than 
 We have built a fully functional, highly technical MVP ready for competition. Here is what makes the engine so powerful:
 
 ### 1. Linguistic Intelligence (Google Gemini API)
-- **Live Text Analysis:** The engine processes SOS text messages using the **Google Gemini 1.5 API**. It outputs structured JSON that automatically determines Threat Type, Severity (Low/Medium/Critical), and Priority (1-10).
+- **Live Text Analysis:** The engine processes SOS text messages using the **Google Gemini 2.0 API**. It outputs structured JSON that automatically determines Threat Type, Severity (Low/Medium/Critical), and Priority (1-10).
 - **Push-To-Talk Voice Recognition:** A built-in microphone engine automatically converts panicked voice input into text so users can report dangers under extreme duress without typing.
 - **Fail-Safe Rule Engine:** If the Gemini API fails or lacks internet access, the system instantly hot-swaps to an offline, keyword-based Natural Language rule engine.
 
@@ -42,7 +42,7 @@ We have built a fully functional, highly technical MVP ready for competition. He
 
 - **Frontend & Logic:** HTML5, CSS3, Vanilla ES6+ Javascript
 - **Cloud & Database:** Firebase Realtime Database
-- **Artificial Intelligence:** Google Gemini 1.5 Flash (Text & Vision)
+- **Artificial Intelligence:** Google Gemini 2.0 Flash (Text & Vision)
 - **Spatial Processing:** Leaflet.js
 - **Design:** Modern Glassmorphism, CSS variable theming
 
